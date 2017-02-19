@@ -1,0 +1,97 @@
+#createProjectForm{
+	margin-top:15px;
+}
+.projectItemContainer{
+	margin-top:5px;
+	background:white;
+}
+.queryFormHeader{
+	font-size:18px;
+	font-weight: bold;
+	color:#337ab7;
+	display:inline-block;
+	margin-right:10px;
+}
+.projectItemContainer>.row{
+	margin-top:15px;
+	margin-bottom:15px;
+}
+
+#menuContainer{
+	margin-top:5px;
+}
+#menuContainer .menu_item{
+	font-size: 18px;
+	margin-left:5px;
+	display:inline-block;
+	margin-right: 5px;
+}
+#menuContainer .menu_item:hover{
+	cursor:pointer;
+}
+#menuContainer .menu_item.active{
+	color:rgb(235, 150, 23);
+}
+.projectItemContainer >.row:first-child{
+	background: #e1f3fa;
+	padding-top:2px;
+	padding-bottom: 2px;
+}
+#allProjectContainer .projectItemContainer >.row:first-child{
+	background: #e1f3fa;
+	padding-top:4px;
+	padding-bottom: 4px;
+}
+#wrapperContainer .table-hover tr:hover{
+	background: #FFF3EE;
+	cursor:pointer;
+}
+
+#wrapperContainer .form-group{
+	margin-left:20px;
+}
+#wrapperContainer .form-group label{
+	margin-right: 5px;
+}
+.select2-container--default .select2-selection--single{
+	width:150px;
+}
+#wrapperContainer{
+	margin-top: 100px;
+}
+
+
+#wrapperContainer .col-xs-12  .form-group{
+	margin-left: 5px;
+}
+.cust_name_select_all {
+    width: 225px;
+}
+
+.queryFormHeaderContainer{
+	width:260px;
+}
+.formSelectContainer{
+	width:150px;
+}
+#wrapperContainer .fixed-table-pagination .pagination-detail{
+	margin-top:0px;
+	margin-bottom: -15px;
+}
+#selectAllContainer{
+	width:225px;
+}
+
+#wrapperContainer .approingContainerHeader{
+	margin-top:0px;
+}
+.searchForContainer{
+	margin-left:0px;
+	margin-right: 0px;
+}
+.searchForContainer .col-xs-12{
+	padding-left:0px;
+}
+#createProjectBtn {
+    margin-right: 15px;
+}

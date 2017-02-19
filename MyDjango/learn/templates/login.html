@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="x-ua-compatible" content="IE=8,9,10,11">
+		<meta charset="UTF-8">
+		<title>Login</title>
+		{% load static from staticfiles %}
+		<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+		 
+		<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+		 
+		<style>
+			html,body {
+				height: 100%;
+			}
+			.box {
+				filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#6699FF', endColorstr='#6699FF'); /*  IE */
+				background-image:linear-gradient(bottom, #6699FF 0%, #6699FF 100%);
+				background-image:-o-linear-gradient(bottom, #6699FF 0%, #6699FF 100%);
+				background-image:-moz-linear-gradient(bottom, #6699FF 0%, #6699FF 100%);
+				background-image:-webkit-linear-gradient(bottom, #6699FF 0%, #6699FF 100%);
+				background-image:-ms-linear-gradient(bottom, #6699FF 0%, #6699FF 100%);
+				
+				margin: 0 auto;
+				position: relative;
+				width: 100%;
+				height: 100%;
+			}
+			.login-box {
+				width: 100%;
+				max-width:500px;
+				height: 400px;
+				position: absolute;
+				top: 50%;
+
+				margin-top: -200px;
+				/*设置负值，为要定位子盒子的一半高度*/
+				
+			}
+			@media screen and (min-width:500px){
+				.login-box {
+					left: 50%;
+					/*设置负值，为要定位子盒子的一半宽度*/
+					margin-left: -250px;
+				}
+			}	
+
+			.form {
+				width: 100%;
+				max-width:500px;
+				height: 275px;
+				margin: 25px auto 0px auto;
+				padding-top: 25px;
+			}	
+			.login-content {
+				height: 300px;
+				width: 100%;
+				max-width:500px;
+				background-color: rgba(255, 250, 2550, .6);
+				float: left;
+			}		
+				
+				
+			.input-group {
+				margin: 0px 0px 30px 0px !important;
+			}
+			.form-control,
+			.input-group {
+				height: 40px;
+			}
+
+			.form-group {
+				margin-bottom: 0px !important;
+			}
+			.login-title {
+				padding: 20px 10px;
+				background-color: rgba(0, 0, 0, .6);
+			}
+			.login-title h1 {
+				margin-top: 10px !important;
+			}
+			.login-title small {
+				color: #fff;
+			}
+
+			.link p {
+				line-height: 20px;
+				margin-top: 30px;
+			}
+			.btn-sm {
+				padding: 8px 24px !important;
+				font-size: 16px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		 <div class="box">
+			<div class="login-box">
+			<!-- <h1>欢迎来到CMCC入库系统</h1> -->
+				<div class="login-title text-center">
+					<h1><small>登录</small></h1>
+				</div>
+				<div class="login-content ">
+				<div class="form">
+				<!-- <form action="#" method="post"> -->
+					<div class="form-group">
+						<div class="col-xs-12  ">
+							<div class="input-group">
+								<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+								<input type="text" id="uname" name="name" class="form-control" placeholder="用户名">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12  ">
+							<div class="input-group">
+								<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+								<input type="password" id="pw" name="pw" class="form-control" placeholder="密码">
+							</div>
+						</div>
+					</div>
+					<div class="form-group form-actions">
+						<div class="col-xs-4 col-xs-offset-4 ">
+							<button type="submit" class="btn btn-sm btn-info" onclick="login()"><span class="glyphicon glyphicon-off"></span> 登录</button>
+						</div>
+					</div>
+                    {% csrf_token %}
+					<!-- <div class="form-group">
+						<div class="col-xs-6 link">
+							<p class="text-center remove-margin"><small>忘记密码？</small> <a href="javascript:void(0)" ><small>找回</small></a>
+							</p>
+						</div>
+						<div class="col-xs-6 link">
+							<p class="text-center remove-margin"><small>还没注册?</small> <a href="javascript:void(0)" ><small>注册</small></a>
+							</p>
+						</div>
+					</div> -->
+				<!-- </form> -->
+				</div>
+			</div>
+		</div>
+	</div>
+		 
+		 
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script>
+	var pathname = window.location.pathname;
+	$('#u_menu a').each(function() {
+		if($.trim($(this).attr('href')) == $.trim(pathname)) {
+			$(this).addClass('currentTab');
+		}
+	});
+	$(function() {
+		check_login();
+	})
+
+	var loginedTemplate = "<span style='color:#B0D7F3;font-weight:700'><span id='userNameId'></span> has logged  &nbsp;&nbsp;<a href='javascript:logout()' style='color:#ECF044'>logout</a>";
+
+	function check_login() {
+		var username = $("#passed-username").attr("data");
+		if(username) {
+			var content = loginedTemplate;
+
+			$("#login-container-gt").html(content);
+			$('#userNameId').text(username);
+		} else {
+			var _t = "<font size='3px' color='#FFFFFF' ></font><input type='text' class='inputNameGT'  name='uname' id='uname'";
+			_t += "placeholder='username'></input> ";
+			_t += "<font size='3px' color='#FFFFFF' ></font><input type='password' class='inputPasswordGT'  name='pw' id='pw' ";
+			_t += "placeholder='password'></input> ";
+			_t += "<button class='btn btn-sm' name='login' id='btn-login' >login</button>";
+
+			$("#login-container-gt").html(_t);
+			$("#btn-login").click(login);
+			$(".ul_div").hide(); //
+		}
+
+	}
+    
+    
+    function csrfSafeMethod(method) {  
+        // these HTTP methods do not require CSRF protection  
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));  
+    }  
+    function sameOrigin(url) {  
+        // test that a given url is a same-origin URL  
+        // url could be relative or scheme relative or absolute  
+        var host = document.location.host; // host + port  
+        var protocol = document.location.protocol;  
+        var sr_origin = '//' + host;  
+        var origin = protocol + sr_origin;  
+        // Allow absolute or scheme relative URLs to same origin  
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||  
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||  
+            // or any other URL that isn't scheme relative or absolute i.e relative.  
+            !(/^(\/\/|http:|https:).*/.test(url));  
+    }  
+    
+    function getCookie(name){
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        if(arr=document.cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    }
+    
+	function login() {
+		var username = $("#uname").val(),
+			password = $("#pw").val();
+		if(!username || !password) return
+        alert(getCookie("csrftoken"));
+        var csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({  
+            beforeSend: function(xhr, settings) {  
+                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {  
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);  
+                }  
+            }  
+        });  
+        
+		$.ajax({
+			method: "POST",
+			url: "/user_login/",
+			dataType: "json",
+			data: {
+				name: username,
+				pw: password
+			}
+		}).done(function(response) {
+			 
+			if(response.status != 200) {
+				alert(response.message);
+				return
+			}
+			var username = $("#uname").val();
+			var content = loginedTemplate;
+
+			$("#login-container").html(content);
+			$('#userNameId').text(username);
+			$(".ul_div").show();
+			$("#login_name").val(username);
+			 
+			// location.href='home';
+			if (response.message=='no permission!'){
+				alert('您无权限登录此系统，请联系管理员开通权限')
+				return
+			}
+			redirectURL();
+
+		});
+	}
+ 
+	function redirectURL(){
+	var redUrl = location.href+'';
+	 
+	var indexUrl = redUrl.lastIndexOf('#*redirecturl*=');
+	var accessUri = ( indexUrl>-1 ? redUrl.substring(indexUrl+15) : "/home");
+	 
+	window.location.href = accessUri;
+}
+</script>
+	</body>
+</html>

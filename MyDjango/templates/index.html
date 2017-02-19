@@ -1,0 +1,64 @@
+{% extends 'base.html'%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+
+
+
+
+</head>
+
+
+<body>
+ {% csrf_token %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+
+    </nav>
+
+
+
+
+{% block content %}
+    <div class="container">
+
+
+
+    </div>
+    {% block slideshow%}{% endblock%}
+{% block page_content%}{% endblock %}
+
+<!--footer开始-->
+    <div id="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8"> Copyright &copy; nomovie.com</div>
+            <div class="col-md-2">
+              <ul>
+                <li><a target="_blank"  href="">新浪微博</a></li>
+                <li><a target="_blank"  href="">腾讯微博</a></li>
+              </ul>
+            </div>
+            <div class="col-md-2">
+              <ul>
+                <li><a href="#">回到顶部</a></li>
+                <li><a href="#">联系我们</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!--footer结束 -->
+
+{% endblock %}
+
+
+
+
+{% block allfilms %}{% endblock %}
+{% block index%}{% endblock %}
+</body>
+</html>

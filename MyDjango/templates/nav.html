@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>动态导航栏演示</title>
+<link href="/site_media/style.css" rel="stylesheet" type="text/css" />
+    <style>
+    body
+{
+        background-color:#FFFFFF;
+}
+
+#nav
+{
+        height:26px;
+        border-bottom:2px solid #ccc;
+        list-style:none;
+}
+
+#nav li
+{
+        float:left;
+        font-size:14px;
+}
+
+#nav li a
+{
+        color:#03b;
+        text-decoration:none;
+        display:block;
+        width:88px;
+        height:19px;
+        text-align:center;
+        background:url(bg.gif) no-repeat;
+        margin-left:8px;
+        padding-top:6px;
+}
+
+#nav li a:hover
+{
+        font-weight:bold;
+}
+
+#nav li a#current
+{
+        background:url(cur.gif) no-repeat;
+        color:#666;
+        font-weight:bold;
+        height:20px;
+}
+</style>
+</head>
+<body>
+        <ul id="nav">
+                <li><a href="/" id="current">首 页</a></li>
+                <li><a href="/article/" >文 章</a></li>
+                <li><a href="/blog/" >Blog</a></li>
+                <li><a href="/forum/" >论 坛</a></li>
+                <li><a href="/about/" >联 系</a></li>
+        </ul>
+</body>
+</html>

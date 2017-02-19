@@ -1,0 +1,7 @@
+<uwsgi>
+  <socket>10.0.0.174:8099</socket>
+  <chdir>/home/mingjianliu/MyDjango</chdir>
+  <module>MyDjango.wsgi</module>
+  <processes>1</processes>
+  <daemonize>uwsgi.log</daemonize>
+</uwsgi>

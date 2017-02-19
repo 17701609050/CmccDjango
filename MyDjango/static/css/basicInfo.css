@@ -1,0 +1,121 @@
+.ProjectInfoHeaderRight {
+	float: right;
+	width: 30%;
+}
+
+.ProjectInfoHeaderRight input {
+	width: 50%;
+	display: inline-block;
+}
+
+.ProjectInfoHeaderLeft {
+	float: left;
+}
+
+.ProjectInfoHeaderLeft .header {
+	font-size: 24px;
+	margin-left: 20px;
+	font-weight: bold;
+}
+
+.projectHeader {
+	background: #4dc9fa;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	color: white;
+}
+
+.ProjectInfoHeaderRight .btn-info {
+	background: #fce8ca;
+	color: slategray;
+}
+
+.projectLabel {
+	display: inline-block;
+	margin-top: 8px;
+	margin-bottom: 7px;
+}
+
+.queryFormHeader {
+	font-size: 18px;
+	font-weight: bold;
+	color: #337ab7;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.modifyItem {
+	width: 200px;
+	margin-top: 8px;
+	margin-bottom: 7px;
+}
+
+#basicContainer {
+	margin-top: 15px;
+}
+
+#basicContainerHeader {
+	margin-top: 10px;
+}
+
+#btnSave {
+	float: right;
+	margin-right: 20px;
+}
+
+#basicContainer,
+#relatedFormContainer {
+	padding-left: 50px;
+	padding-right: 50px;
+}
+
+#basicContainer .col-xs-2 {
+	width: 10%;
+}
+
+#basicContainer .col-xs-4 {
+	width: 40%;
+}
+
+#basicContainer .col-xs-4 select {
+	width: 60%;
+}
+
+#basicContainer .col-xs-4 input {
+	width: 60%;
+}
+
+.select2-container {
+	width: 100% !important;
+}
+
+.select2-results__option[aria-selected] {
+	cursor: pointer;
+	overflow: hidden;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#selectUserContainer>ul {
+	padding-left: 0px;
+	margin-bottom: 0px;
+}
+
+#selectUserContainer {
+	width: 160px;
+	border: 1px solid gray;
+	border-radius: 2px;
+	background: white;
+}
+
+#selectUserContainer option:hover {
+	background: #C1CDC1;
+	cursor: pointer;
+}
+
+#selectUserContainer option {
+	text-overflow: ellipsis;
+	word-spacing: normal;
+	overflow: hidden;
+}

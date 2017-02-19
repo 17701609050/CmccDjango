@@ -1,0 +1,156 @@
+<link rel="stylesheet" href="/static/css/select2.css" />
+<script src="/static/js/select2.js"></script>
+<div class="container-fluid " id="operationHeaderContainer">
+	<div class="row">
+		<div class="col-xs-12 projectHeader">
+			<div id="headerProjectName" class="ProjectInfoHeaderLeft" style="display:none;">
+
+				<span class="floatLeft  header">
+					{[projectForm.cust_name.value]}
+				</span>
+				<span class="floatLeft  header">
+					--
+				</span>
+
+				<span class="header floatLeft ">
+					{[projectForm.project_name.value]}
+					
+				</span>
+				<span class="floatLeft margin-top-10 margin-left-10 headerCust">
+					({[projectForm.project_status.value]})
+				</span>
+
+			</div>
+			<div class="ProjectInfoHeaderRight">
+
+				<span ng-show="couldWrite" class="rubishContainer floatRight" id="rubishOperator">
+							<span class="glyphicon glyphicon-trash rabish">
+							</span>
+				</span>
+				<button class="btn btn-info floatRight margin-left-5" id="refreshButtn">
+					<span class="glyphicon glyphicon-refresh">		
+							</span>
+							<span>
+								切换项目
+							</span>
+				</button>
+				<div class="select2Container floatRight" id="select2Container">
+					<select class="form-control  select" id="toggleInput"></select>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.ProjectInfoHeaderRight {
+		float: right;
+		width: 330px;
+	}
+	
+	.ProjectInfoHeaderRight input {
+		width: 50%;
+		display: inline-block;
+	}
+	
+	.ProjectInfoHeaderLeft {
+		float: left;
+	}
+	
+	.ProjectInfoHeaderLeft .header {
+		font-size: 24px;
+		margin-left: 20px;
+		font-weight: bold;
+	}
+	
+	.projectHeader {
+		background: #4dc9fa;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		color: white;
+	}
+	
+	.ProjectInfoHeaderRight .btn-info {
+		background: #fce8ca;
+		color: slategray;
+	}
+	
+	.rabish {
+		margin-left: 20px;
+		font-size: 18px;
+		display: inline-block;
+		cursor: pointer;
+	}
+	
+	.rubishContainer {
+		display: inline-block;
+		padding-top: 7px;
+	}
+	
+
+	#select2Container .select2-selection {
+		height: 33px;
+	}
+	
+	#operationHeaderContainer {
+		margin-top: 100px;
+	}
+	
+	.headerCust {
+		color: #696969;
+	}
+</style>
+<script>
+	$('#toggleInput').select2({
+		ajax: {
+			url: '/project/get_projectname_by_name',
+			delay: 250,
+			processResults: function(data) {
+				data = eval('(' + data + ')');
+				var results = [];
+				results = data.data.map(function(item) {
+					return {
+						id: item[0],
+						text: item[1]
+					}
+				});
+
+				return {
+					results: results
+				}
+			}
+		}
+	});
+
+	$('#refreshButtn').click(function() {
+		var project_id = $('#toggleInput').val();
+		if(project_id) {
+			var url = window.location.href.split('?')[0] + '?project_id=' + project_id;
+			window.location.href = url;
+		}
+	});
+
+	$('#rubishOperator').click(function() {
+		var flag = confirm('确认取消该项目？');
+		if(flag) {
+			var project_id = $('#project_id_div').attr('data');
+			$.ajax({
+				type: "get",
+				url: "/project/delete_project_info/" + project_id,
+				async: true,
+				success: function(response) {
+					res = eval('(' + response + ')');
+					if(res.state == 200) {
+						alert('取消成功');
+						window.location.reload();
+					} else {
+						alert('取消失败');
+					}
+				}
+			});
+		}
+	});
+	setTimeout(function() {
+		$('#headerProjectName').css('display', 'block');
+	}, 500);
+</script>

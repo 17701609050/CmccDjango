@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<!--
+        	<meta http-equiv="x-ua-compatible" content="IE=8,9,10,11">
+        -->
+
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+		<meta charset="UTF-8">
+		<title id="titlePage"></title>
+		<link rel="stylesheet" href="/static/css/bootstrap.css" />
+
+		<link rel="stylesheet" href="/static/miniui/themes/default/miniui.css" />
+		<link rel="stylesheet" href="/static/miniui/themes/bootstrap/skin.css" />
+		<link rel="stylesheet" href="/static/css/large_mode.css" />
+		<link rel="stylesheet" href="/static/css/fileinput.css" />
+		<link rel="stylesheet" href="/static/css/common.css?t={{checkShouldRefreshJs}}" />
+		<link rel="stylesheet" href="/static/css/projectWareHouse.css?t={{checkShouldRefreshJs}}" />
+		<link rel="stylesheet" href="/static/css/jquery.datetimepicker.min.css" />
+		<!--[if lt IE 9]>
+		 <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+		 <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		<script src="/static/js/jquery-1.11.3.min.js"></script>
+		<script src="/static/js/jquery.datetimepicker.min.js"></script>
+		<script src="/static/js/common.js?t={{checkShouldRefreshJs}}"></script>
+		<script src="/static/js/fileinput.js"></script>
+		<script src="/static/miniui/miniui.js"></script>
+		<style>
+
+		</style>
+	</head>
+
+	<body ng-app="myApp" ng-controller="projectManager">
+		<div id="project_id_div" data="{{project_id}}">
+		</div>
+		<div id="state_div" data="{{state}}">
+		</div>
+		<div id="message_div" data="{{message}}">
+		</div>
+		<div id="fromFlag_div" data="{{fromFlag}}">
+		</div>
+		{% include "header.html" %} {% include "operationBar.html" %}
+		<div class="container-fluid displayNone" id="wrapperContainer">
+
+			<div class="row">
+				<div class="col-xs-12">
+					{% include "projectInfoBar.html" %}
+				</div>
+			</div>
+			<div class="row  margin-top-10">
+				<div class="col-xs-12">
+
+					<div class="operationBar">
+						<span class="queryFormHeader floatLeft">
+								<span class="glyphicon glyphicon-chevron-right"></span>
+						<span>
+									入库详情
+								</span>
+						</span>
+						<button ng-if="couldWrite" ng-click="saveEnterInfo()" class="btn btn-info  floatRight saveBtn "><span class="glyphicon glyphicon-save"></span>保存</button>
+					</div>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<table class="table tableWareHouseInfo table-bordered">
+						<thead>
+							<tr>
+								<th>
+									测试轮次
+								</th>
+								<th>
+									计划送测时间
+								</th>
+								<th>
+									实际送测时间
+								</th>
+								<th>
+									软件版本
+								</th>
+								<th>
+									问题数
+								</th>
+								<th>
+									影响上会问题数
+								</th>
+								<th>
+									修改问题数
+								</th>
+								<th>
+									关闭问题数
+								</th>
+							</tr>
+						</thead>
+
+						<tr ng-repeat="wareHouse in wareHouse">
+							<td>
+								{[wareHouse.testRangeLabel]}
+							</td>
+							<td ng-click="toModify(wareHouseManager[$index] ,'plan_sendtest_time' )">
+								<div ng-show="wareHouseManager[$index]['plan_sendtest_time'] == 'read'">
+									<span>
+										{[wareHouse.plan_sendtest_time]}
+									</span>
+								</div>
+								<div ng-show="wareHouseManager[$index]['plan_sendtest_time'] == 'modify'">
+									<input readonly class="form-control timeRange  input-sm" ng-model="wareHouse.plan_sendtest_time" />
+								</div>
+							</td>
+							<td ng-click="toModify(wareHouseManager[$index] ,'actual_sendtest_time' )">
+								<div ng-show="wareHouseManager[$index]['actual_sendtest_time'] == 'read'">
+									<span>
+										{[wareHouse.actual_sendtest_time]}
+									</span>
+								</div>
+								<div ng-show="wareHouseManager[$index]['actual_sendtest_time'] == 'modify'">
+									<input type="text" class="form-control timeRange input-sm" ng-model="wareHouse.actual_sendtest_time" />
+								</div>
+							</td>
+							<td ng-click="toModify(wareHouseManager[$index] ,'software_version' )">
+								<div ng-show="wareHouseManager[$index]['software_version'] == 'read'">
+									<span>
+										{[wareHouse.software_version]}
+									</span>
+								</div>
+								<div ng-show="wareHouseManager[$index]['software_version'] == 'modify'">
+									<input type="text" class="form-control input-sm" ng-model="wareHouse.software_version" />
+								</div>
+							</td>
+							<td ng-click="toModify(wareHouseManager[$index] ,'left_question' )">
+								<div>
+									<span>
+										{[wareHouse.left_question]}
+									</span>
+								</div>
+
+							</td>
+							<td ng-click="toModify(wareHouseManager[$index] ,'fluence_question' )">
+								<div>
+									<span>
+																	{[wareHouse.fluence_question]}
+																</span>
+								</div>
+
+							</td>
+							<td ng-click="toModify(wareHouseManager[$index] ,'modify_question' )">
+								<div>
+									<span>
+										{[wareHouse.modify_question]}
+									</span>
+								</div>
+
+							</td>
+							<td ng-click="toModify(wareHouseManager[$index] ,'close_question' )">
+								<div>
+									<span>
+										{[wareHouse.close_question]}
+									</span>
+								</div>
+
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row  margin-top-10">
+				<div class="col-xs-12">
+
+					<div class="operationBar">
+						<span class="queryFormHeader floatLeft">
+							<span class="glyphicon glyphicon-chevron-right"></span>
+							<span>
+								上会复检
+							</span>
+						</span>
+						<button ng-if="couldWrite" ng-click="saveMeetingInfo()" class="btn btn-info floatRight saveBtn"><span class="glyphicon glyphicon-save"></span>保存</button>
+					</div>
+
+				</div>
+			</div>
+			<div class="row margin-top margin-bottom-15">
+				<div class="col-xs-6">
+					<form class="form-inline " role="form">
+						<div class="form-group margin-left-5">
+							<label>{[projectForm.onmeeting_time.label]}</label>
+							<input ng-if="couldWrite" ng-model="projectForm.onmeeting_time.value" type="text" class="form-control timeRange margin-left-5  input-sm" placeholder="{[projectForm.onmeeting_time.label]}">
+							<span ng-if="!couldWrite" class=" margin-left-10 margin-right-10">
+								{[projectForm.onmeeting_time.value ? projectForm.onmeeting_time.value : '待填写']}
+							</span>
+						</div>
+						<div class="form-group margin-left-10">
+							<label>{[projectForm.recheck_num.label]}</label>
+							<span class=" margin-left-10">
+								{[projectForm.recheck_num.value]}
+							</span>
+						</div>
+					</form>
+				</div>
+				<div class="col-xs-6">
+					<form class="form-inline " role="form">
+						<div class="form-group ">
+							<label>{[projectForm.passed_time.label]}</label>
+							<input ng-if="couldWrite" ng-model="projectForm.passed_time.value" type="text" class="form-control timeRange margin-left-5  input-sm" placeholder="{[projectForm.passed_time.label]}">
+							<span ng-if="!couldWrite" class=" margin-left-10">
+								{[projectForm.passed_time.value ? projectForm.passed_time.value : '待填写']}
+							</span>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="row  margin-top-20 ">
+				<div class="col-xs-12">
+
+					<div class="operationBar">
+						<span class="queryFormHeader floatLeft">
+							<span class="glyphicon glyphicon-chevron-right"></span>
+						<span>
+									问题列表
+							</span>
+						</span>
+						<div class="floatRight" id="operationContainer">
+							<div id="exportOrimport" class="floatRight">
+
+							</div>
+							<button ng-click="showQueryQuestion()" class="btn btn-info floatRight"><span class="glyphicon glyphicon-search"></span>查询</button>
+							<button ng-show="couldWrite" class="btn btn-info floatRight" id="btnExportBtn"><span class="glyphicon glyphicon-export"></span>导出</button>
+
+							<a ng-show="couldWrite" class="btn btn-info floatRight" style="position:relative;"   href="javascript:void(0);">
+								<span class="glyphicon glyphicon-import"></span>导入
+								<form action="" method="post" enctype="multipart/form-data" id="importForm" name="importForm">
+									<input style="position:absolute;left:0;top:0;width:100%; height:100%;z-index:999;opacity:0;" onchange="submitFile()" type="file" name="file_data"   />
+								</form>
+							</a>
+							<button ng-show="couldWrite" class="btn btn-info floatRight" id="btnSaveQuestion"><span class="glyphicon glyphicon-save"></span>保存</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="row displayNone" id="queryFormContainer">
+				<div class="floatLeft labelCloseRange">
+					<span class="queryFormLabel">{[queryForm.to_solve_the_problem_rounds.label]}</span>
+				</div>
+				<div class="floatLeft valueCloseRange">
+					<select ng-model="queryForm.to_solve_the_problem_rounds.value" class="input-sm form-control">
+						<option ng-repeat="is_left_question in  dropdowns.is_left_question" value="{[is_left_question.value]}">{[is_left_question.label]}
+						</option>
+					</select>
+				</div>
+				<div class="floatLeft labelDifferenceMeeting">
+					<span class="queryFormLabel">
+										{[questionForm.difference_meeting.label]}
+									</span>
+				</div>
+				<div class="floatLeft valueDifferenceMeeting">
+					<select ng-model="queryForm.difference_meeting.value" class="form-control input-sm">
+						<option value="">--全部--
+						</option>
+						<option ng-repeat="diff_onmeeting in  dropdowns.diff_onmeeting" value="{[diff_onmeeting.value]}">{[diff_onmeeting.label]}
+						</option>
+					</select>
+				</div>
+				<div class="floatLeft labelAction">
+					<span class="queryFormLabel">
+										{[queryForm.action.label]}
+									</span>
+				</div>
+				<div class="floatLeft valueAction">
+					<select ng-model="queryForm.action.value" class="form-control input-sm">
+						<option value="">--全部--
+						</option>
+						<option ng-repeat="action in dropdowns.actions" value="{[action.value]}">{[action.label]}</option>
+					</select>
+				</div>
+				<div class="floatLeft labelGroup">
+					<span class="queryFormLabel">
+										{[queryForm.groups.label]}
+									</span>
+				</div>
+				<div class="floatLeft valueGroup">
+					<select ng-model="queryForm.groups.value" class="form-control input-sm">
+						<option value="">--全部--
+						</option>
+						<option ng-repeat="group in dropdowns.groups" value="{[group.value]}">{[group.label]}</option>
+					</select>
+				</div>
+				<div class="floatLeft labelQuestionStatus">
+					<span class="queryFormLabel">
+										{[queryForm.question_status.label]}
+									</span>
+				</div>
+				<div class="floatLeft valueQuestionStatus">
+					<input type="text" ng-model="queryForm.question_status.value" class="input-sm form-control">
+				</div>
+				<div class="floatLeft labelModelName">
+					<span class="queryFormLabel">
+										{[queryForm.model_name.label]}
+									</span>
+				</div>
+				<div class="floatLeft valueModelName">
+					<input type="text" ng-model="queryForm.model_name.value" class="form-control input-sm">
+				</div>
+			</div>
+
+			<div class="row ">
+				<div class="col-xs-12 margin-top-5" ng-click="questionOperationManager($event)">
+
+
+					<div id="bugList" oncellcommitedit="window.miniRenders.validate" oncellbeginedit="window.miniRenders.couldWrite" class="mini-datagrid" url="/issues?project_id={{project_id}}" idField="id" allowResize="true" pageSize="20" allowCellEdit="true" allowCellSelect="true" multiSelect="true" editNextOnEnterKey="true" editNextRowCell="true">
+						<div property="columns">
+							<div align="center" renderer="window.miniRenders.initQuestion" field="question_num" headerAlign="center" align="center" allowSort="true" width="9%">{[questionForm.question_num.label]}
+
+							</div>
+							<div field="bug_id" renderer="window.miniRenders.initBugId" allowSort="true" width="6%" align="center" headerAlign="center">{[questionForm.bug_id.label]}
+
+							</div>
+							<div name="question_content" width="19%" field="question_content" allowSort="true" align="center" renderer="window.miniRenders.initQuestionContent" headerAlign="center">{[questionForm.question_content.label]}
+
+							</div>
+
+							<!--ComboBox：远程数据-->
+							<div name="question_serious" field="question_serious" width="7%" allowSort="true" align="center" headerAlign="center">{[questionForm.question_serious.label]}
+
+							</div>
+							<div field="model_name" width="9%" allowSort="true" align="center" headerAlign="center">{[questionForm.model_name.label]}
+
+							</div>
+							<div field="related_case" width="9%" allowSort="true" align="center" headerAlign="center">{[questionForm.related_case.label]}
+
+							</div>
+							<div type="comboboxcolumn" autoShowPopup="true" width="5%" field="close_range" align="center" headerAlign="center" allowSort="true">{[questionForm.close_range.label]}
+								<input property="editor" class="mini-combobox" style="width:100%;" data="window.dropdownTestRage" />
+							</div>
+							<!--ComboBox：本地数据-->
+							<div type="comboboxcolumn" cellbeginedit="window.miniRenders.couldWrite" autoShowPopup="true" name="difference_meeting" field="difference_meeting" width="6%" allowSort="true" align="center" headerAlign="center">{[questionForm.difference_meeting.label]}
+								<input property="editor" class="mini-combobox" style="width:100%;" data="window.dropdownDiffOnmeeting" />
+							</div>
+							<div type="comboboxcolumn" cellbeginedit="window.miniRenders.couldWrite" autoShowPopup="true" field="groups" width="8%" allowSort="true" align="center" headerAlign="center">{[questionForm.groups.label]}
+								<input property="editor" class="mini-combobox" style="width:100%;" data="window.dropdownGroups" />
+							</div>
+							<div type="comboboxcolumn"    cellbeginedit="window.miniRenders.couldWrite" autoShowPopup="true" field="action" width="8%" allowSort="true" align="center" headerAlign="center">{[questionForm.action.label]}
+								<input property="editor" class="mini-combobox" style="width:100%;" data="window.dropdownAction" />
+							</div>
+							<div field="comments" cellbeginedit="window.miniRenders.couldWrite" width="14%" align="center" headerAlign="center" allowSort="true">{[questionForm.comments.label]}
+								<input property="editor" class="mini-textbox" style="width:100%;" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="checkQuestion" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="{[guestQuestion ? 'active':'']}" ng-click="showGuestQuestion()">
+							<a>客户问题</a>
+						</li>
+						<li role="presentation" class="{[showBugzilla ? 'active':'']}" ng-show=" checkFormData.bug_id.value " ng-click="showToBugzilla()">
+							<a>Bugzilla</a>
+						</li>
+					</ul>
+					<div class="container-fluid createQuestionContainer" ng-show=" showBugzilla">
+						<div class="row">
+							<div class="col-xs-3 staticLabel">
+								{[checkFormData.bug_id.label]}
+							</div>
+							<div class="col-xs-9 staticValue">
+								{[checkFormData.bug_id.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-3 staticLabel">
+								{[checkFormData.bug_status.label]}
+							</div>
+							<div class="col-xs-9 staticValue" title="{[checkFormData.bug_owner.value]}">
+								{[checkFormData.bug_status.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-3 staticLabel">
+								{[checkFormData.bug_owner.label]}
+							</div>
+							<div class="col-xs-9 staticValue" title="{[checkFormData.bug_owner.value]}">
+								{[checkFormData.bug_owner.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-3 staticLabel">
+								{[checkFormData.base_on_ver.label]}
+							</div>
+							<div class="col-xs-9 staticValue" title="{[checkFormData.base_on_ver.value]}">
+								{[checkFormData.base_on_ver.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-3 staticLabel">
+								{[checkFormData.fix_on_ver.label]}
+							</div>
+							<div class="col-xs-9 staticValue" title="{[checkFormData.fix_on_ver.value]}">
+								{[checkFormData.fix_on_ver.value]}
+							</div>
+						</div>
+					</div>
+					<div class="container-fluid createQuestionContainer " ng-show=" guestQuestion ">
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.question_num.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.question_num.value]}">
+								{[checkFormData.question_num.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.question_serious.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.question_serious.value]}">
+								{[checkFormData.question_serious.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.question_content.label]}
+							</div>
+							<div id="question_content_container" class="col-xs-10 staticValue" title="{[checkFormData.question_content.value]}">
+								{[checkFormData.question_content.valueContent]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.model_name.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.model_name.value]}">
+								{[checkFormData.model_name.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.related_case.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.related_case.value]}">
+								{[checkFormData.related_case.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.action.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.action.value]}">
+								{[checkFormData.action.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.groups.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.groups.value]}">
+								{[checkFormData.groups.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.difference_meeting.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.difference_meeting.value]}">
+								{[checkFormData.difference_meeting.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.close_range.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.close_range.value]}">
+								{[checkFormData.close_range.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.question_title.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.question_title.value]}">
+								{[checkFormData.question_title.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.question_status.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.question_status.value]}">
+								{[checkFormData.question_status.value]}
+							</div>
+						</div>
+						<div class="row">
+
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.problem_category.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.problem_category.value]}">
+								{[checkFormData.problem_category.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.closing_time.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.closing_time.value]}">
+								{[checkFormData.closing_time.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.problem_properties.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.problem_properties.value]}">
+								{[checkFormData.problem_properties.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.manufacturer_name.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.manufacturer_name.value]}">
+								{[checkFormData.manufacturer_name.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.project_name.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.project_name.value]}">
+								{[checkFormData.project_name.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.the_product_line.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.the_product_line.value]}">
+								{[checkFormData.the_product_line.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.the_product_type.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.the_product_type.value]}">
+								{[checkFormData.the_product_type.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.business_type.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.business_type.value]}">
+								{[checkFormData.business_type.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.software_version.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.software_version.value]}">
+								{[checkFormData.software_version.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.imei.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.imei.value]}">
+								{[checkFormData.imei.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.use_cases.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.use_cases.value]}">
+								{[checkFormData.use_cases.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.ranges.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.ranges.value]}">
+								{[checkFormData.ranges.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.to_solve_the_problem_rounds.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.to_solve_the_problem_rounds.value]}">
+								{[checkFormData.to_solve_the_problem_rounds.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.close_the_reason.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.close_the_reason.value]}">
+								{[checkFormData.close_the_reason.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.whether_or_not_to_discuss.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.whether_or_not_to_discuss.value]}">
+								{[checkFormData.whether_or_not_to_discuss.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.project.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.project.value]}">
+								{[checkFormData.project.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.organization.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.organization.value]}">
+								{[checkFormData.organization.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.business_types.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.business_types.value]}">
+								{[checkFormData.business_types.value]}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.test_site.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.test_site.value]}">
+								{[checkFormData.test_site.value]}
+							</div>
+							<div class="col-xs-2 staticLabel">
+								{[checkFormData.creation_time.label]}
+							</div>
+							<div class="col-xs-4 staticValue" title="{[checkFormData.creation_time.value]}">
+								{[checkFormData.creation_time.value]}
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+
+		<div class="modal fade" id="modifyQuestion">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="col-xs-3 control-label">{[modifyForm.to_solve_the_problem_rounds.label]}</label>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="modifyForm.to_solve_the_problem_rounds.value">
+										<option ng-repeat="testRage in dropdowns.testRage" value="{[testRage.value]}">{[testRage.label]}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-xs-3 control-label">{[modifyForm.groups.label]}</label>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="modifyForm.groups.value">
+										<option ng-repeat="group in dropdowns.groups" value="{[group.value]}">{[group.label]}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-xs-3 control-label">{[modifyForm.action.label]}</label>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="modifyForm.action.value">
+										<option ng-repeat="action in dropdowns.actions" value="{[action.value]}">{[action.label]}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-xs-3 control-label">{[modifyForm.difference_meeting.label]}</label>
+								<div class="col-xs-6">
+									<label class="checkbox-inline" ng-repeat=" diff_onmeeting in  dropdowns.diff_onmeeting">
+  										<input type="radio"  value="{[diff_onmeeting.value]}" name="difference_meeting" 	
+  											ng-click="toggleSelection( modifyForm.difference_meeting.value , diff_onmeeting.value )"> {[diff_onmeeting.label]}
+									</label>
+								</div>
+							</div>
+
+						</form>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>Close</button>
+						<button type="button" class="btn btn-primary" ng-click="modifyQuestion()"><span class="glyphicon glyphicon-ok"></span>保存</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		{% include "bottom.html" %}
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script src="/static/js/angular.js"></script>
+		<script src="/static/js/config.js?t={{checkShouldRefreshJs}}"></script>
+		<script type="text/javascript" src="/static/js/projectEnterHouse.js?t={{checkShouldRefreshJs}}"></script>
+	</body>
+
+</html>

@@ -1,0 +1,90 @@
+body {
+	font-family: "Microsoft YaHei";
+}
+
+
+.glyphiconText {
+	display: inline-block;
+	margin-left: 5px;
+}
+
+.floatLeft {
+	float: left;
+}
+
+.floatRight {
+	float: right;
+}
+
+.margin-top {
+	margin-top: 15px;
+}
+.margin-top-5{
+	margin-top:5px;
+}
+.margin-top-10{
+	margin-top:10px;
+}
+.margin-bottom-15{
+	margin-bottom: 15px;
+}
+.margin-bottom-10{
+	margin-bottom: 10px;
+}
+.margin-bottom-5{
+	margin-bottom: 5px;
+}
+.margin-top-20{
+	margin-top: 20px;
+}
+.margin-left-5{
+	margin-left: 5px;
+}
+.margin-left-10{
+	margin-left: 10px;
+}
+.margin-right-10{
+	margin-right: 10px;
+}
+
+
+.requiredValidClass {
+	color: red;
+}
+
+#menuContainer>li.active>a {
+	background: rgb(235, 150, 23);
+}
+.displayNone{
+	display:none;
+}
+ input.form-control[readonly]{
+	background: white;
+}
+.select2-dropdown.select2-dropdown--below{
+	width:150px !important;
+}
+
+#wrapperContainer .table thead{
+	background: #f5f5f5;
+}
+
+#wrapperContainer .table-bordered th{
+	border-bottom: 1px solid  #ddd;
+	
+}
+
+.queryFormHeader {
+	font-size: 18px;
+	font-weight: bold;
+	color: #337ab7;
+	display: inline-block;
+	margin-right: 10px;
+}
+#selectUserContainer{
+	position: absolute;
+	z-index: 101;
+}
+.glyphicon{
+	margin-right: 3px;
+}

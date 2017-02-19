@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="x-ua-compatible" content="IE=8,9,10,11">
+		<meta charset="UTF-8">
+		<title>Home</title>
+		{% load static from staticfiles %}
+		<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/bootstrap-table.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/common.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/projectManager.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/jquery.datetimepicker.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/select2.css' %}" />
+		<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+		<script src="{% static 'js/jquery.datetimepicker.min.js' %}"></script>
+		<script src="{% static 'js/common.js' %}"></script>
+		<script src="{% static 'js/config.js' %}"></script>
+		<style>
+
+		</style>
+	</head>
+
+	<body ng-app="myApp" ng-controller="projectManager">
+		{% include "header.html" %}
+
+		<div class="container-fluid displayNone" id="wrapperContainer">
+			<div class="row">
+				<div class="col-xs-10">
+					<div id="menuContainer">
+						<span class="floatLeft menu_item {[showMyProject?'active':'']}" ng-click="modifyToMyProject()">
+							<span class="glyphicon glyphicon-user"></span><span class="glyphiconText">我的项目</span>
+						</span>
+						<span class="floatLeft">
+							|
+						</span>
+						<span ng-click="modifyToAllProject()" class="floatLeft menu_item {[showAllProject?'active':'']}">
+							<span class="glyphiconText"><span class="glyphicons glyphicons-parents"></span>全部项目</span>
+						</span>
+					</div>
+				</div>
+				<div class="col-xs-2">
+					<button id="createProjectBtn" ng-click="showCreateProject()" type="button" class="btn btn-info floatRight"><span class="glyphicon glyphicon-plus"></span><span class="glyphiconText"></span>创建项目</button>
+				</div>
+			</div>
+			<div id="allProjectContainer" ng-show="showAllProject">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="container-fluid projectItemContainer">
+							<div class="row searchForContainer approingContainerHeader" >
+								<div class="col-xs-12">
+
+									<form class="form-inline" role="form">
+										<div class="form-group">
+											<span class="queryFormHeader">
+											<span class="glyphicon glyphicon-chevron-right">
+												</span>
+											<span>
+												查询
+												</span>
+											</span>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<form class="form-inline" role="form">
+										<div class="form-group">
+											<label ng-cloak>{[projectForm.chip_name.label]}</label>
+											<select ng-model="allForm.chip_name.value" class="form-control input-sm">
+												<option value="">--全部--
+												</option>
+												<option ng-repeat="chip in  dropdowns.chips" value="{[chip.value]}">{[chip.label]}
+												</option>
+											</select>
+										</div>
+										<div class="form-group" id="selectAllContainer">
+											<label ng-cloak>{[projectForm.cust_name.label]}</label>
+
+											<select id="selectAll" class="form-control" ng-model="allForm.cust_name.value">
+
+											</select>
+										</div>
+										<div class="form-group">
+											<label ng-cloak>{[projectForm.project_name.label]}</label>
+											<input type="text" class="form-control input-sm" placeholder="{[projectForm.project_name.label]}" ng-model="allForm.project_name.value">
+										</div>
+										<div class="form-group">
+											<label ng-cloak>{[allForm.project_status.label]}</label>
+											<label class="checkbox-inline" ng-repeat=" project_status in  dropdowns.project_status">
+  												<input type="checkbox"  value="{[project_status.value]}" ng-checked="allForm.project_status.value.indexOf(project_status.value)>-1" ng-click="toggleSelection(allForm.project_status.value , project_status.value )"> {[project_status.label]}
+											</label>
+										</div>
+
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="container-fluid projectItemContainer">
+							<div class="row approingContainerHeader searchForContainer">
+								<div class="col-xs-12">
+									<form class="form-inline" role="form">
+										<div class="form-group">
+											<span class="queryFormHeader">
+											<span class="glyphicon glyphicon-chevron-right">
+												</span>
+											<span>
+												全部项目
+												</span>
+											</span>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 tableContainer">
+									<table id="projectAll">
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="myProjectContainer" ng-show="showMyProject">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="container-fluid projectItemContainer">
+							<div class="row approingContainerHeader searchForContainer" >
+								<div class="col-xs-12">
+
+									<form class="form-inline" role="form">
+										<div class="form-group">
+											<span class="queryFormHeader">
+											<span class="glyphicon glyphicon-chevron-right">
+												</span>
+											<span>
+												上会复检项目(Approving)
+												</span>
+											</span>
+										</div>
+										<div class="form-group">
+											<label ng-cloak>{[projectForm.chip_name.label]}</label>
+											<select ng-model="approvingForm.chip_name.value" class="form-control input-sm">
+												<option value="">--全部--
+												</option>
+												<option ng-repeat="chip in  dropdowns.chips" value="{[chip.value]}">{[chip.label]}
+												</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label ng-cloak>{[projectForm.cust_name.label]}</label>
+
+											<select id="selectApproving" class="form-control" ng-model="approvingForm.cust_name.value">
+
+											</select>
+										</div>
+									</form>
+
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-12 tableContainer">
+									<table id="projectApproving">
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="container-fluid projectItemContainer ">
+							<div class="row searchForContainer">
+								<div class="col-xs-12">
+
+									<form class="form-inline" role="form">
+										<div class="form-group">
+											<span class="queryFormHeader">
+										<span class="glyphicon glyphicon-chevron-right">
+										</span>
+											<span>
+											送测中项目(Testing)
+										</span>
+											</span>
+										</div>
+
+										<div class="form-group">
+											<label ng-cloak>{[projectForm.chip_name.label]}</label>
+											<select ng-model="testingForm.chip_name.value" class="form-control input-sm">
+												<option value="">--全部--
+												</option>
+												<option ng-repeat="chip in  dropdowns.chips" value="{[chip.value]}">{[chip.label]}
+												</option>
+											</select>
+										</div>
+
+										<div class="form-group">
+											<label>测试轮数</label>
+											<select ng-model="testingForm.test_range.value" class="form-control input-sm">
+												<option value="">--全部--
+												</option>
+												<option ng-repeat="testRage in  dropdowns.testRage" value="{[testRage.value]}">{[testRage.label]}
+												</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label ng-cloak>{[projectForm.cust_name.label]}</label>
+
+											<select id="selectTesting" class="form-control" ng-model="testingForm.cust_name.value">
+
+											</select>
+										</div>
+									</form>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 ">
+									<table id="projectTesting">
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="container-fluid projectItemContainer ">
+							<div class="row searchForContainer">
+								<div class="col-xs-12">
+
+									<form class="form-inline" role="form">
+										<div class="form-group">
+											<span class="queryFormHeader">
+										<span class="glyphicon glyphicon-chevron-right">
+										</span>
+											<span>
+											计划送测项目(Plan)
+										</span>
+											</span>
+										</div>
+
+										<div class="form-group">
+											<label ng-cloak>{[projectForm.chip_name.label]}</label>
+											<select ng-model="planForm.chip_name.value" class="form-control input-sm">
+												<option value="">--全部--
+												</option>
+												<option ng-repeat="chip in  dropdowns.chips" value="{[chip.value]}">{[chip.label]}
+												</option>
+											</select>
+										</div>
+
+										<div class="form-group">
+											<label ng-cloak>送测类型</label>
+											<select ng-model="planForm.send_test_type.value" class="form-control input-sm">
+												<option value="">--全部--
+												</option>
+												<option ng-repeat="sendTestType in  dropdowns.sendTestType" value="{[sendTestType.value]}">{[sendTestType.label]}
+												</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label ng-cloak>{[projectForm.cust_name.label]}</label>
+
+											<select id="selectPlan" class="form-control" ng-model="planForm.cust_name.value">
+
+											</select>
+										</div>
+									</form>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 ">
+									<table id="projectPlan">
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="container-fluid projectItemContainer ">
+							<div class="row searchForContainer">
+								<div class="col-xs-12">
+
+									<form class="form-inline" role="form">
+										<div class="form-group">
+											<span class="queryFormHeader">
+										<span class="glyphicon glyphicon-chevron-right">
+										</span>
+											<span>
+											入库通过项目(Pass)
+										</span>
+											</span>
+										</div>
+
+										<div class="form-group">
+											<label ng-cloak>{[passForm.chip_name.label]}</label>
+											<select ng-cloak ng-model="passForm.chip_name.value" class="form-control input-sm">
+												<option value="">--全部--
+												</option>
+												<option ng-repeat="chip in  dropdowns.chips" value="{[chip.value]}">{[chip.label]}
+												</option>
+											</select>
+										</div>
+
+										<div class="form-group">
+											<label>通过轮次</label>
+											<select ng-cloak ng-model="passForm.passed_round.value" class="form-control input-sm">
+												<option value="">--全部--
+												</option>
+												<option ng-repeat="testRage in  dropdowns.testRage" value="{[testRage.value]}">{[testRage.label]}
+												</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label ng-cloak>{[passForm.cust_name.label]}</label>
+
+											<select id="selectPass" class="form-control" ng-model="passForm.cust_name.value">
+
+											</select>
+										</div>
+
+									</form>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 tableContainer">
+									<table id="projectPass">
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="container-fluid projectItemContainer ">
+							<div class="row searchForContainer">
+								<div class="col-xs-12">
+
+									<form class="form-inline" role="form">
+										<div class="form-group">
+											<span class="queryFormHeader">
+												<span class="glyphicon glyphicon-chevron-right">
+												</span>
+											<span>
+												已取消项目(Cancel)
+												</span>
+											</span>
+										</div>
+
+										<div class="form-group">
+											<label ng-cloak>{[projectForm.chip_name.label]}</label>
+											<select ng-cloak ng-model="cancelForm.chip_name.value" class="form-control input-sm">
+												<option value="">--全部--
+												</option>
+												<option ng-repeat="chip in  dropdowns.chips" value="{[chip.value]}">{[chip.label]}
+												</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label ng-cloak>{[projectForm.cust_name.label]}</label>
+
+											<select id="selectCancel" class="form-control" ng-model="cancelForm.cust_name.value">
+
+											</select>
+										</div>
+									</form>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 tableContainer">
+									<table id="projectCancel">
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="modal fade" id="createProject">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" ng-click="modifyToShowBasic()" class="{[showBasic ? 'active':'']}">
+							<a href="#"><span class="glyphiconText">项目信息</span></a>
+						</li>
+						<li role="presentation" ng-click="modifyToShowRelation()" class="{[showRelationPerson ? 'active':'']}">
+							<a href="#">项目干系人</a>
+						</li>
+					</ul>
+
+					<div id="createProjectForm">
+						<form class="form-horizontal" role="form" ng-show="showBasic" name="createProjectForm">
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.chip_name.label]}</label>
+								<div class="col-xs-6">
+									<select class="form-control" required="true" name="chip_name" ng-model="projectForm.chip_name.value">
+
+										<option value="{[chip.value]}" ng-repeat="chip in dropdowns.chips">{[chip.label]}</option>
+									</select>
+
+									<span class="requiredValidClass" ng-show="createProjectForm.chip_name.$invalid && createProjectForm.chip_name.$dirty">{[projectForm.chip_name.required.message]}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.cust_name.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" name="cust_name" required="true" class="form-control" placeholder="{[projectForm.cust_name.label]}" ng-model="projectForm.cust_name.value">
+
+									<span class="requiredValidClass" ng-show="createProjectForm.cust_name.$invalid && createProjectForm.cust_name.$dirty">{[projectForm.cust_name.required.message]}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.project_name.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" name="project_name" required="true" class="form-control" placeholder="{[projectForm.project_name.label]}" ng-model="projectForm.project_name.value">
+									<span class="requiredValidClass" ng-show="createProjectForm.project_name.$invalid && createProjectForm.project_name.$dirty">{[projectForm.project_name.required.message]}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.send_test_type.label]}</label>
+								<div class="col-xs-6">
+
+									<select required="true" ng-model="projectForm.send_test_type.value" class="form-control">
+										<option ng-repeat="sendTestType in  dropdowns.sendTestType" value="{[sendTestType.value]}">{[sendTestType.label]}
+										</option>
+									</select>
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.test_range.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" name="test_range" class="form-control" placeholder="{[projectForm.test_range.label]}" ng-model="projectForm.test_range.value">
+									<span class="requiredValidClass" ng-show="projectForm.test_range.required.flag == '1' &&  createProjectForm.test_range.$invalid && createProjectForm.test_range.$dirty">{[projectForm.test_range.required.message]}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.plan_sendtest_time.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" readonly="true" class="form-control timeRange" placeholder="{[projectForm.plan_sendtest_time.label]}" ng-model="projectForm.plan_sendtest_time.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.operate_system.label]}</label>
+								<div class="col-xs-6">
+
+									<select ng-model="projectForm.operate_system.value" class="form-control">
+										<option ng-repeat="operationSystem in  dropdowns.operationSystem" value="{[operationSystem.value]}">{[operationSystem.label]}
+										</option>
+									</select>
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.Radiofrequency_PA.label]}</label>
+								<div class="col-xs-6">
+
+									<select ng-model="projectForm.Radiofrequency_PA.value" class="form-control">
+										<option ng-repeat="rePA in  dropdowns.rePA" value="{[rePA.value]}">{[rePA.label]}
+										</option>
+									</select>
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.TDLTE.label]}</label>
+								<div class="col-xs-6">
+
+									<label class="checkbox-inline" ng-repeat=" TDLTE in  dropdowns.TDLTE">
+  								<input type="checkbox"  value="{[TDLTE.value]}" ng-checked="projectForm.TDLTE.value.indexOf(TDLTE.value)>-1" ng-click="toggleSelection(projectForm.TDLTE.value , TDLTE.value )"> {[TDLTE.label]}
+							</label>
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.FDDLTE.label]}</label>
+								<div class="col-xs-9">
+
+									<label class="checkbox-inline" ng-repeat=" FDDLTE in  dropdowns.FDDLTE">
+  								<input type="checkbox"  value="{[FDDLTE.value]}" ng-checked="projectForm.FDDLTE.value.indexOf(FDDLTE.value)>-1" ng-click="toggleSelection(projectForm.FDDLTE.value , FDDLTE.value )"> {[FDDLTE.label]}
+							</label>
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.TDSCDMA.label]}</label>
+								<div class="col-xs-6">
+
+									<label class="checkbox-inline" ng-repeat=" TDSCDMA in  dropdowns.TDSCDMA">
+  								<input type="checkbox"  value="{[TDSCDMA.value]}" ng-checked="projectForm.TDSCDMA.value.indexOf(TDSCDMA.value)>-1" ng-click="toggleSelection(projectForm.TDSCDMA.value , TDSCDMA.value )"> {[TDSCDMA.label]}
+							</label>
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.WCDMA.label]}</label>
+								<div class="col-xs-6">
+									<label class="checkbox-inline" ng-repeat=" WCDMA in  dropdowns.WCDMA">
+  								<input type="checkbox"  value="{[WCDMA.value]}" ng-checked="projectForm.WCDMA.value.indexOf(WCDMA.value)>-1" ng-click="toggleSelection(projectForm.WCDMA.value , WCDMA.value )"> {[WCDMA.label]}
+							</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.GSM.label]}</label>
+								<div class="col-xs-6">
+
+									<label class="checkbox-inline" ng-repeat=" GSM in  dropdowns.GSM">
+  								<input type="checkbox"  value="{[GSM.value]}" ng-checked="projectForm.GSM.value.indexOf(GSM.value)>-1" ng-click="toggleSelection(projectForm.GSM.value , GSM.value )"> {[GSM.label]}
+							</label>
+
+								</div>
+							</div>
+						</form>
+						<form class="form-horizontal" role="form" ng-show="showRelationPerson" name="createProjectRelations">
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.CPM.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.CPM.label]}" ng-model="projectForm.CPM.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.SW_TAM.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.SW_TAM.label]}" ng-model="projectForm.SW_TAM.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.HW_TAM.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.HW_TAM.label]}" ng-model="projectForm.HW_TAM.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.HW_RF.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.HW_RF.label]}" ng-model="projectForm.HW_RF.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.Audio_PL.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.Audio_PL.label]}" ng-model="projectForm.Audio_PL.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.Power_PL.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.Power_PL.label]}" ng-model="projectForm.Power_PL.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.Ali_PM.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.Ali_PM.label]}" ng-model="projectForm.Ali_PM.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.PLD_PM.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.PLD_PM.label]}" ng-model="projectForm.PLD_PM.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.CSD_PM.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.CSD_PM.label]}" ng-model="projectForm.CSD_PM.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.PHY_PL.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.PHY_PL.label]}" ng-model="projectForm.PHY_PL.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.Test_PL.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.Test_PL.label]}" ng-model="projectForm.Test_PL.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.PICLAB_FO.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.PICLAB_FO.label]}" ng-model="projectForm.PICLAB_FO.value">
+								</div>
+							</div>
+							<div class="form-group">
+								<label ng-cloak class="col-xs-3 control-label">{[projectForm.FT_FO.label]}</label>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" placeholder="{[projectForm.FT_FO.label]}" ng-model="projectForm.FT_FO.value">
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" ng-disabled="createProjectRelations.$invalid || createProjectForm.$invalid || projectForm.test_range.required.flag " class="btn btn-primary" ng-click="saveProject()"><span class="glyphicon glyphicon-ok"></span>保存</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.modal -->
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script src="/static/js/bootstrap-table.min.js"></script>
+		<script src="/static/js/bootstrap-table-export.js"></script>
+		<script src="/static/js/angular.js"></script>
+		<script src="/static/js/select2.js"></script>
+		<script type="text/javascript" src="/static/js/projectManager.js"></script>
+	</body>
+
+</html>

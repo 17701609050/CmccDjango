@@ -1,0 +1,20 @@
+#wrapperContainer {
+	margin-top: 100px;
+}
+
+.singleChipContainer {
+	margin-left: 10px;
+}
+
+#relatedFormContainer {
+	background: white;
+}
+
+.queryFormHeader {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+#relatedFormContainer .queryHeader {
+	background: #e1f3fa;
+}

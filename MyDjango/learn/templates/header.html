@@ -1,0 +1,264 @@
+<style>
+	.setting {
+		display: none;
+	}
+</style>
+<style>
+	#headerContainerGT {
+		background: #1955b0;
+		height: 90px;
+		border-bottom: 4px solid #f0a30a;
+		position: fixed;
+		top: 0px;
+		width: 100%;
+		font-size: 14px;
+		position: fixed;
+		right: 0;
+		left: 0;
+		z-index: 1030;
+	}
+	
+	#headerContainerGT * {
+		box-sizing: content-box;
+		-moz-box-sizing: content-box;
+		/* Firefox */
+		-webkit-box-sizing: content-box;
+		/* Safari */
+	}
+	
+	.u_menu_gt {
+		list-style-type: none;
+	}
+	
+	.u_menu_gt li {
+		float: left;
+		margin-left: 15px;
+		margin-right: 15px;
+	}
+	
+	#headerContainerGT img {
+		margin-top: 20px;
+		margin-left: 10px;
+		float: left;
+	}
+	
+	.u_menu_gt a {
+		color: white;
+	}
+	
+	.u_menu_gt {
+		float: left;
+		margin-top: 23px;
+		margin-left: 20px;
+	}
+	
+	#u_menu>li {
+		margin-top: 15px;
+		font-size: 18px;
+	}
+	
+	#u_menu {
+		padding: 0px;
+	}
+	
+	#u_menu a {
+		color: #FABD00;
+	}
+	
+	.u_menu_gt a:hover {
+		text-decoration: none;
+	}
+	
+	.u_menu_gt a.currentTab {
+		color: #f0a30a;
+	}
+	
+	#logoutOption {
+		color: #ECF044
+	}
+	
+	#login-container-gt .inputNameGT,
+	#login-container-gt .inputPasswordGT {
+		display: inline-block;
+		padding: 4px 6px;
+		margin-bottom: 10px;
+		font-size: 14px;
+		line-height: 20px;
+		color: #555555;
+		vertical-align: middle;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+		width: 70px;
+		float: left;
+		margin-left: 4px;
+		margin-right: 4px;
+	}
+	
+	#login-container-gt {
+		margin-right: 20px;
+		margin-top: 35px;
+		float: right;
+		width: 269px;
+	}
+	
+	#btn-login {
+		margin-left: 4px;
+		margin-right: 4px;
+	}
+	
+	#u_menu .active {
+		color: #B0D7F3;
+	}
+</style>
+
+<div id="headerContainerGT">
+	<img src="/static/images/logo.png" />
+
+	<ul class="u_menu_gt" id="u_menu">
+
+		<li>
+			<a id="indexPage" href="/projects">首页</a>
+		</li>
+		<li>
+			<a href="#">|</a>
+		</li>
+		<li>
+			<a id="qualityCenter" href="/summary/summaryEnterHouseProject">数据统计</a>
+		</li>
+
+		<li>
+			<a href="#">|</a>
+		</li>
+		<li>
+			<a id="settingCenter" href="/setting/loggingUserManager">设置</a>
+		</li>
+		<li>
+			<a href="#">|</a>
+		</li>
+		<li>
+			<a href="#">帮助</a>
+		</li>
+	</ul>
+
+	<div id="login-container-gt">
+		<a id="logoutOption">logout</a>
+	</div>
+	<div class="data" id="passed-username" data={{uname}}></div>
+	<div class="u_type" id="u_type" data={{uname.u_type}}></div>
+</div>
+
+<script>
+	var pathname = window.location.pathname;
+	$('#u_menu a').each(function() {
+		if($.trim($(this).attr('href')) == $.trim(pathname)) {
+			$(this).addClass('currentTab');
+		}
+	});
+	$(function() {
+		check_login();
+	})
+
+	var loginedTemplate = "<span style='color:#B0D7F3;font-weight:700'>signed in as <span id='userNameId'></span>   &nbsp;&nbsp;<span title='sign out' style='cursor:pointer;color:#ECF044' class='glyphicon glyphicon-log-out' onclick='javascript:logoutGT()'></span>";
+
+	function check_login() {
+		var username = $("#passed-username").attr("data");
+		if(username) {
+			var content = loginedTemplate;
+
+			$("#login-container-gt").html(content);
+			$('#userNameId').text(username);
+		} else {
+			var _t = "<font size='3px' color='#FFFFFF' ></font><input type='text' class='inputNameGT'  name='uname' id='uname'";
+			_t += "placeholder='username'></input> ";
+			_t += "<font size='3px' color='#FFFFFF' ></font><input type='password' class='inputPasswordGT'  name='pw' id='pw' ";
+			_t += "placeholder='password'></input> ";
+			_t += "<button class='btn btn-sm' name='login' id='btn-login' >login</button>";
+
+			$("#login-container-gt").html(_t);
+			$("#btn-login").click(login);
+			$(".ul_div").hide(); //
+		}
+
+	}
+
+	function login() {
+		var username = $("#uname").val(),
+			password = $("#pw").val();
+		if(!username || !password) return
+
+		$.ajax({
+			method: "POST",
+			url: "/login",
+			dataType: "json",
+			data: {
+				name: username,
+				pw: password
+			}
+		}).done(function(response) {
+			if(response.status != 200) {
+				alert(response.message);
+				return
+			}
+			var username = $("#uname").val();
+			var content = loginedTemplate;
+
+			$("#login-container").html(content);
+			$('#userNameId').text(username);
+			$(".ul_div").show();
+			$("#login_name").val(username);
+			location.reload();
+
+		});
+	}
+
+	function logoutGT() {
+
+		$.ajax({
+			method: "GET",
+			url: "/logout",
+			dataType: "json"
+		}).done(function(response) {
+			//console.log(response);
+			if(response.status != 200) {
+				alert(response.message);
+				return
+			}
+			var _t = "<input type='text' name='uname' id='uname'";
+			_t += "placeholder='username'></input> ";
+			_t += " <input type='password' name='pw' id='pw' ";
+			_t += "placeholder='password'></input> ";
+			_t += "<button  name='login' id='btn-login' >login</button>";
+
+			$("#login-container").html(_t);
+			$("#btn-login").click(login);
+			$("#passed-username").attr("data", '');
+			location.href = "/login/";
+		});
+	}
+
+	var loginArray = window.loginArray ? window.loginArray : [];
+	var login_user = $("#passed-username").attr("data") ? $("#passed-username").attr("data") : '';
+	//login_user = 'tommy' ;
+	var flag = false;
+	$.each(loginArray, function(index, item) {
+		if($.trim(item) == $.trim(login_user)) {
+			flag = true;
+			return true;
+		}
+	});
+	if(flag) {
+		$("#setting").show();
+	} else {
+		$("#setting").hide();
+	}
+
+	pathNames = window.location.pathname.split('/');
+	if(pathNames[1] == 'summary') {
+		$('#qualityCenter').addClass('active');
+	} else if('setting' == pathNames[1]) {
+		$('#settingCenter').addClass('active');
+	} else {
+		$('#indexPage').addClass('active');
+	}
+</script>

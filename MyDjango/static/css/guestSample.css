@@ -1,0 +1,51 @@
+.ProjectInfoHeaderRight{
+	float:right;
+	width:30%;
+}
+.ProjectInfoHeaderRight input{
+	width:50%;
+	display: inline-block;
+}
+
+.ProjectInfoHeaderLeft{
+	float:left;
+}
+.ProjectInfoHeaderLeft .header{
+	font-size:24px;
+	margin-left: 20px;
+	font-weight: bold;
+}
+
+.projectHeader{
+	background: #4dc9fa;
+	padding-top:10px;
+	padding-bottom: 10px;
+	color:white;
+}
+.ProjectInfoHeaderRight .btn-info{
+	background: #fce8ca;
+	color:slategray;
+}
+.projectLabel{
+	display:inline-block;
+	margin-top:5px;
+	
+}
+.queryFormHeader{
+	font-size:18px;
+	font-weight: bold;
+	color:#337ab7;
+	display:inline-block;
+	margin-right:10px;
+}
+#guestSampleManger td , #guestSampleManger th{
+	width:25%;
+	text-align: center;
+}
+.deleteA{
+	cursor:pointer;
+}
+.readyTimeInput{
+	width:50%;
+	margin:0 auto;
+}
