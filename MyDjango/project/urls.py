@@ -10,4 +10,7 @@ urlpatterns = patterns('',
         url(r'^get_chip_name/$', 'project.views.get_chip_name', name='get_chip_name'),
         url(r'^queryPersonByChip/(.+)', 'project.views.queryPersonByChip', name='queryPersonByChip'),
         url(r'^createProject/$', 'project.views.createProject', name='createProject'),
+        url(r'^projects/all/$', 'project.views.projectsall'),
+        url(r'^projects/status/$', 'project.views.get_data_by_status', name='get_data_by_status'),
+        url(r'^enterHouse/$', 'project.views.enterWareHouse', name='enterWareHouse')
         )

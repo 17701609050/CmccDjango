@@ -75,6 +75,22 @@ class CmccProject(models.Model):
     test_items = models.CharField(max_length=500)
     Cust_Model = models.CharField(max_length=500)
 
+    class Meta:
+        verbose_name ='CmccProject'
+        verbose_name_plural = 'CmccProject'
+
+    @staticmethod
+    def get_all_project(data):
+
+        resultdata = CmccProject.objects.all()
+
+        result_list = []
+        for res in resultdata:
+
+            result_list.append(json.loads(res.toJSON()))
+
+        return result_list, len(result_list)
+
     @classmethod
     def json_to_cmcc_project(self, data):
         ''' 返回项目对象 '''
