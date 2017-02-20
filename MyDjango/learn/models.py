@@ -91,6 +91,14 @@ class CmccProject(models.Model):
 
         return result_list, len(result_list)
 
+    @staticmethod
+    def getproject_basic_info_byid(projectid):
+
+        obj = CmccProject.objects.get(project_id=projectid)
+        print obj
+        replys = CmccProjectStakeholders.objects.filter(project_id=obj.project_id)
+        print replys[0]
+
     @classmethod
     def json_to_cmcc_project(self, data):
         ''' 返回项目对象 '''

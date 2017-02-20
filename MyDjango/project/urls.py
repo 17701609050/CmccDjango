@@ -12,5 +12,6 @@ urlpatterns = patterns('',
         url(r'^createProject/$', 'project.views.createProject', name='createProject'),
         url(r'^projects/all/$', 'project.views.projectsall'),
         url(r'^projects/status/$', 'project.views.get_data_by_status', name='get_data_by_status'),
-        url(r'^enterHouse/$', 'project.views.enterWareHouse', name='enterWareHouse')
+        url(r'^enterHouse/$', 'project.views.enterWareHouse', name='enterWareHouse'),
+        url(r'^project/get_project_basic_question/(.+)', 'project.views.get_project_basic_question')
         )

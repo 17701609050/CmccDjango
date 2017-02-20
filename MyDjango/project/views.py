@@ -52,9 +52,9 @@ def createProject(request):
         projectStakeholdersData = CmccProjectStakeholders.json_to_cmcc_projectStakeholders(data)
         project = CmccProject(**projectdata)
         project.save()
-        
+        print project.project_id
         projectStakeholdersData.update({"project_id":project.project_id})
-        stakeholders = models.CmccProjectStakeholders(**projectStakeholdersData)
+        stakeholders = CmccProjectStakeholders(**projectStakeholdersData)
         stakeholders.save()
 
         json_data = json.dumps({"state":200, "data":project.project_id, "message":""})
@@ -107,4 +107,31 @@ def get_data_by_status(request):
     return HttpResponse(json.dumps(project_result), content_type="application/json")#json.dumps(result
 
 def enterWareHouse(request):
-    print 'enterWareHouse'
+    project_id = request.GET.get('project_id', '')
+    print project_id
+     
+    return render(request, 'enterWareHouse.html', {"project_id":project_id})
+
+def get_project_basic_question(request, project_id):
+    print project_id
+    result = dict(state=200, data={}, message="")  
+    result_dic1 = {}
+    result_dic2 = {} 
+    result_data = CmccProject.objects.filter(project_id=6)
+    # print result_data[0].toJSON()
+    ProjectStakeholders = []
+    if result_data:
+        ProjectStakeholders = result_data[0].cmccprojectstakeholders_set.all()
+        result_dic1 = json.loads(result_data[0].toJSON())
+    # print ProjectStakeholders
+    if ProjectStakeholders:
+        # result_dic.update({json.loads(ProjectStakeholders[0].toJSON())})
+        result_dic2 = ProjectStakeholders[0].toJSON()
+    
+    result_dic1 = json.loads(result_dic2['project'].toJSON())
+    print result_dic1
+    print result_dic2
+    result_dic = dict(result_dic1, **result_dic2)
+    result['data'] = result_dic1
+    json_data = json.dumps(result)
+    return HttpResponse(json_data, content_type="application/json") 
