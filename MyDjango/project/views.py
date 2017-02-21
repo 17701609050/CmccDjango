@@ -14,18 +14,13 @@ import json
 from learn.models import CmccProject, CmccProjectStakeholders, CmccProjectChip
 
 @login_required
-def index(request): 
-    # if request.user.is_authenticated():
-     
+def index(request):
     return render(request, 'home.html', {'uname': request.user})
-    # else:
-    #     return HttpResponseRedirect('/login?next=/home/')
-
 
 @login_required
 def get_chip_name(request): 
     chipdata = CmccProjectChip.objects.values("chip_name")
-    print chipdata
+
     chhiplist = []
     for chip in chipdata:
         chhiplist.append(chip['chip_name'])
@@ -110,28 +105,31 @@ def enterWareHouse(request):
     project_id = request.GET.get('project_id', '')
     print project_id
      
-    return render(request, 'enterWareHouse.html', {"project_id":project_id})
+    return render(request, 'enterWareHouse.html', {"project_id": project_id})
 
 def get_project_basic_question(request, project_id):
-    print project_id
-    result = dict(state=200, data={}, message="")  
-    result_dic1 = {}
-    result_dic2 = {} 
-    result_data = CmccProject.objects.filter(project_id=6)
-    # print result_data[0].toJSON()
-    ProjectStakeholders = []
+
+    result = dict(state=200, data={}, message="")
+
+    result_dic2 = None
+    result_data = CmccProject.objects.filter(project_id=project_id)
+
+    projectstakeholder = []
     if result_data:
-        ProjectStakeholders = result_data[0].cmccprojectstakeholders_set.all()
-        result_dic1 = json.loads(result_data[0].toJSON())
-    # print ProjectStakeholders
-    if ProjectStakeholders:
-        # result_dic.update({json.loads(ProjectStakeholders[0].toJSON())})
-        result_dic2 = ProjectStakeholders[0].toJSON()
-    
-    result_dic1 = json.loads(result_dic2['project'].toJSON())
-    print result_dic1
-    print result_dic2
-    result_dic = dict(result_dic1, **result_dic2)
-    result['data'] = result_dic1
+        projectstakeholder = result_data[0].cmccprojectstakeholders_set.all()
+
+    if projectstakeholder:
+        result_dic2 = projectstakeholder[0].toJSON()
+        result_dic2['project'] = json.loads(result_dic2['project'].toJSON())
+
+    result['data'] = result_dic2
     json_data = json.dumps(result)
-    return HttpResponse(json_data, content_type="application/json") 
+    return HttpResponse(json_data, content_type="application/json")
+
+def issues(request):
+    # if request.method == 'POST':
+    project_id = request.POST.get('project_id', '')
+    print 'project_id', project_id
+    result = dict(state=200, data={}, message="")
+    json_data = json.dumps(result)
+    return HttpResponse(json_data, content_type="application/json")

@@ -310,7 +310,7 @@
 				<div class="col-xs-12 margin-top-5" ng-click="questionOperationManager($event)">
 
 
-					<div id="bugList" oncellcommitedit="window.miniRenders.validate" oncellbeginedit="window.miniRenders.couldWrite" class="mini-datagrid" url="/issues?project_id={{project_id}}" idField="id" allowResize="true" pageSize="20" allowCellEdit="true" allowCellSelect="true" multiSelect="true" editNextOnEnterKey="true" editNextRowCell="true">
+					<div id="bugList" oncellcommitedit="window.miniRenders.validate" oncellbeginedit="window.miniRenders.couldWrite" class="mini-datagrid" href="/issues?project_id={{project_id}}" idField="id" allowResize="true" pageSize="20" allowCellEdit="true" allowCellSelect="true" multiSelect="true" editNextOnEnterKey="true" editNextRowCell="true">
 						<div property="columns">
 							<div align="center" renderer="window.miniRenders.initQuestion" field="question_num" headerAlign="center" align="center" allowSort="true" width="9%">{[questionForm.question_num.label]}
 

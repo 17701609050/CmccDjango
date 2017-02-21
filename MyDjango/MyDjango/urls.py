@@ -39,7 +39,7 @@ urlpatterns = patterns('',
     url(r'^logout/', views.Logout, name='logout'),
 #    url(r'^project/get_chip_name/', views.get_chip_name, name='get_chip_name'),
 #     url(r'^enterHouse/', views.enterWareHouse, name='enterWareHouse'),
-    url(r'^issues/', views.issues, name='issues'),
+#     url(r'^issues/', views.issues, name='issues'),
 
     # url(r'^project/get_project_basic_question/(.+)/', views.get_project_basic_question, name='get_project_basic_question'),
     url(r'^project/get_project_name/(.+)/', views.get_project_name, name='get_project_name'),

@@ -3,8 +3,23 @@ from django.db import models
 import json
 
 class Person(models.Model):
+    FRESHMAN = 'FR'
+    SOPHOMORE = 'SO'
+    JUNIOR = 'JR'
+    SENIOR = 'SR'
+    YEAR_IN_SCHOOL_CHOICES = (
+        (FRESHMAN, 'Freshman'),
+        (SOPHOMORE, 'Sophomore'),
+        (JUNIOR, 'Junior'),
+        (SENIOR, 'Senior'),
+    )
+    year_in_school = models.CharField(max_length=2,
+                                      choices=YEAR_IN_SCHOOL_CHOICES,
+                                      default=FRESHMAN)
     name = models.CharField(max_length=30)
     age = models.IntegerField()
+
+    # shirt_size = models.CharField(max_length=1, choices=YEAR_IN_SCHOOL_CHOICES, default='')
 
     def __unicode__(self):
     # 在Python3中使用 def __str__(self)
