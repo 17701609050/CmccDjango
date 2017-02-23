@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.conf.urls import *
 from django.contrib import admin
+from django.contrib.staticfiles import views as static_views
 from learn import views
+from django.conf import settings
 
 
 urlpatterns = patterns('',
@@ -36,7 +38,7 @@ urlpatterns = patterns('',
     
 #    url(r'^login/$', views.login, name='login'),
     url(r'^user_login/', views.user_login, name='user_login'),
-    url(r'^logout/', views.Logout, name='logout'),
+    # url(r'^logout/', views.Logout, name='logout'),
 #    url(r'^project/get_chip_name/', views.get_chip_name, name='get_chip_name'),
 #     url(r'^enterHouse/', views.enterWareHouse, name='enterWareHouse'),
 #     url(r'^issues/', views.issues, name='issues'),
@@ -55,5 +57,12 @@ urlpatterns = patterns('',
     url(r'', include('webuser.urls')),
     url(r'', include('movie.urls')),
     url(r'', include('project.urls')),
+    url(r'', include('library.urls')),
 
 )
+
+if settings.DEBUG:
+    urlpatterns += [
+        # url(r'^static/(?P<path>.*)$', static_views.static.serve, {'document_root': settings.STATIC_ROOT}, name="static"),
+        url(r'^uploads/(?P<path>.*)$', static_views.static.serve, {'document_root': settings.MEDIA_ROOT}, name="uploads")
+    ]

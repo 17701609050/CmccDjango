@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'project',
     'webuser',
     'movie',
+    'library',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -129,5 +130,6 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder"
 )
 
+MEDIA_URL = '/uploads/'
 
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'uploads')
