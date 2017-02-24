@@ -263,7 +263,7 @@ function summaryProByPassOrSend(queryForm) {
 
 	$.ajax({
 		type: "get",
-		url: "/summary/project",
+		url: "/ajaxproject",
 		async: true,
 		data: t,
 		success: function(response) {
@@ -386,7 +386,7 @@ function summaryProByVersion(queryForm) {
 
 	$.ajax({
 		type: "get",
-		url: "/summary/project",
+		url: "/ajaxproject",
 		async: true,
 		data: t,
 		success: function(response) {

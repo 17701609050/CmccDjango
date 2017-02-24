@@ -1,0 +1,315 @@
+{% load staticfiles %}
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Highcharts</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="{% static 'js/angular.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/sumEnterHousePro.js' %}"></script>
+</head>
+<body>
+<div id="container" style="width: 1200px; height: 400px; margin: 0 auto"></div>
+
+<div id="summaryProByVersion" style="width: 1200px; height: 400px; margin: 0 auto"></div>
+
+<div id="summaryProByVersionTotal" style="width: 1200px; height: 400px; margin: 0 auto"></div>
+
+<script language="JavaScript">
+    var enums = {};
+    enums['summary_type'] = {
+        month: {
+            label: '按月',
+            value: 'month'
+        },
+        week: {
+            label: '按周',
+            value: 'week'
+        }
+    }
+    enums['diff_onmeeting'] = {
+        YES: {
+            label: 'YES',
+            value: 'YES'
+        },
+        NO: {
+            label: 'NO',
+            value: 'NO'
+        }
+    }
+    window.enums = enums;
+
+    $(document).ready(function () {
+        var title = {
+            text: '城市平均气温'
+        };
+        var subtitle = {
+            text: 'source: ziping.lv@spreadtrum.com'
+        };
+        var xAxis = {
+            categories: ['1月', '2月', '3月', '4月', '5月', '6月',
+                '7月', '8月', '9月', '10月', '11月', '12月']
+        };
+        var yAxis = {
+            title: {
+                text: 'Temperature (\xB0C)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        };
+
+        var tooltip = {
+            valueSuffix: '\xB0C'
+        }
+
+        var legend = {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        };
+
+        var series = [
+            {
+                name: '日本',
+                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2,
+                    26.5, 23.3, 18.3, 13.9, 9.6]
+            },
+            {
+                name: '美国',
+                data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8,
+                    24.1, 20.1, 14.1, 8.6, 2.5]
+            },
+            {
+                name: '伦敦',
+                data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0,
+                    16.6, 14.2, 10.3, 6.6, 4.8]
+            },
+            {
+                name: '中国',
+                data: [21, 22, 23, 24, 25, 26, 27,
+                    28, 39, 10.3, 32, 20]
+            }
+        ];
+        var credits = {
+            enabled: false // 禁用版权信息
+        };
+
+        var json = {};
+
+        json.title = title;
+        json.subtitle = subtitle;
+        json.xAxis = xAxis;
+        json.yAxis = yAxis;
+        json.tooltip = tooltip;
+        json.legend = legend;
+        json.series = series;
+        json.credits = credits;
+
+        $('#container').highcharts(json);
+
+        $.ajax({
+            type: "get",
+            url: "/ajaxproject",
+            async: true,
+            {#		data: t,#}
+            success: function (response) {
+
+                if (response.state == 200) {
+                    var data = response.data;
+
+                    data = data.map(function (item) {
+                        return {
+                            year: item[0].substring(0, 4),
+                            month: item[0].substring(4),
+                            V1: item[1].V1,
+                            V2: item[1].V2,
+                            V3: item[1].V3,
+                            yearAndMonth: item[0].substring(0, 4) + '' + init0to9(item[0].substring(4))
+                        }
+                    });
+                    data.sort(function (first, second) {
+                        return parseInt(first.yearAndMonth) - parseInt(second.yearAndMonth);
+                    });
+
+                    //计算columns
+                    var columns = data.map(function (item) {
+                        if (window.summary_type == window.enums.summary_type.week.value) {
+                            return item.year + '年' + item.month + '周';
+                        } else {
+                            return item.year + '年' + item.month + '月';
+                        }
+                    });
+                    console.log(data)
+                    // 计算v1 v2 v3
+                    var v1s = data.map(function (item) {
+                        return item.V1;
+                    });
+                    v1s = {
+                        name: '第一轮',
+                        data: v1s,
+                        {#					color: window.colorsRange.v1#}
+                    }
+
+                    var v2s = data.map(function (item) {
+                        return item.V2;
+                    });
+                    v2s = {
+                        name: '第二轮',
+                        data: v2s,
+                        {#					color: window.colorsRange.v2#}
+                    }
+
+                    v3s = data.map(function (item) {
+                        return item.V3;
+                    });
+                    v3s = {
+                        name: '第三轮',
+                        data: v3s,
+                        {#					color: window.colorsRange.v3#}
+                    }
+                    var currentData = 0;
+                    v1_totals = data.map(function (item) {
+                        currentData = currentData + item.V1;
+                        return currentData;
+                    });
+                    v1_totals = {
+                        name: '第一轮',
+                        data: v1_totals,
+                        {#					color: window.colorsRange.v1#}
+                    }
+
+                    var currentData = 0;
+                    v2_totals = data.map(function (item) {
+                        currentData = currentData + item.V2;
+                        return currentData;
+                    });
+                    v2_totals = {
+                        name: '第二轮',
+                        data: v2_totals,
+                        {#					color: window.colorsRange.v2#}
+                    }
+
+                    var currentData = 0;
+                    v3_totals = data.map(function (item) {
+                        currentData = currentData + item.V3;
+                        return currentData;
+                    });
+                    v3_totals = {
+                        name: '第三轮',
+                        data: v3_totals,
+                        {#					color: window.colorsRange.v3#}
+                    }
+                    console.log(data)
+                    // 计算叠加
+                    summaryProByVersionDetail(columns, [v3s, v2s, v1s]);
+                    summaryProByVersionTotalDetail(columns, [v3_totals, v2_totals, v1_totals]);
+                }
+            }
+        });
+    });
+
+    function init0to9(num) {
+        if (parseInt(num) <= 9) {
+            return '0' + num;
+        } else {
+            return num;
+        }
+
+    }
+
+    function summaryProByVersionDetail(coumns, serious) {
+        $('#summaryProByVersion').highcharts({
+            chart: {
+                type: 'column',
+                {#			width: getChartWidth(),#}
+                height: window.HighchartsHight
+            },
+            title: {
+                text: '通过项目统计'
+            },
+            xAxis: {
+                categories: coumns
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '项目数'
+                }
+            },
+            legend: {
+                align: 'center',
+                verticalAlign: 'bottom',
+                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true,
+                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'gray'
+                    }
+                }
+            },
+            credits: {
+                enabled: false // 禁用版权信息
+            },
+            series: serious
+        });
+
+    }
+
+    function summaryProByVersionTotalDetail(coumns, serious) {
+
+        $('#summaryProByVersionTotal').highcharts({
+            title: {
+                text: '通过项目统计(累计)'
+            },
+            chart: {
+                {#			width: getChartWidth(),#}
+                height: window.HighchartsHight
+            },
+            xAxis: {
+                categories: coumns
+            },
+            yAxis: {
+                title: {
+                    text: '项目数'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: '个'
+            },
+            legend: {
+                align: 'center',
+                verticalAlign: 'bottom',
+                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            credits: {
+                enabled: false // 禁用版权信息
+            },
+            series: serious
+        });
+
+    }
+</script>
+</body>
+</html>

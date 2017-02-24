@@ -133,3 +133,17 @@ def issues(request):
     result = dict(state=200, data={}, message="")
     json_data = json.dumps(result)
     return HttpResponse(json_data, content_type="application/json")
+
+def summaryproject(request):
+
+    return render(request, 'project/summaryProject.html', locals())
+
+def ajaxproject(request):
+    import urllib2
+    urladdress = 'http://10.0.3.55:8000/summary/project?chip_name=&cust_name=&start_date=2016-01-01&end_date=2017-02-23&summary_type=month&difference_meeting=YES&module=&type=sumPassVersion&period_type=month'
+    req = urllib2.Request(urladdress)
+    response = urllib2.urlopen(req)
+    the_page = response.read()
+    print json.loads(the_page)
+    return HttpResponse(the_page, content_type="application/json")
+
