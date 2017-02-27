@@ -58,6 +58,7 @@ urlpatterns = patterns('',
     url(r'', include('movie.urls')),
     url(r'', include('project.urls')),
     url(r'', include('library.urls')),
+    url(r'', include('community.urls')),
 
 )
 

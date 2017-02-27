@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'webuser',
     'movie',
     'library',
+    'community',
 )
 
 MIDDLEWARE_CLASSES = (
