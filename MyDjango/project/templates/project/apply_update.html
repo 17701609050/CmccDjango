@@ -1,0 +1,27 @@
+{% load custom_tag %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+            <nav>
+              <ul class="pagination">
+                {% if contacts.has_previous %}    <!-- 判断是否有首页  -->
+                    <li class="disabled"><a href="#">&laquo;</a></li>
+                {% endif %}
+
+                  {% for page_num in contacts.paginator.page_range %}
+                      {% guess_page contacts.number  page_num %}    <!--   guess_page 直接写刚才在tag里面定义的方法，  contacts.numer表示时当前页，page_num表示for循环到元素-->
+                    {{ 'WERTWRQREWREWREWRETRTRYTR'|escape|linebreaks|truncatewords:"5" }}
+                  {% endfor %}
+
+              {% if contacts.has_next %}           <!-- 判断是否有下一页 -->
+                 <li class="disabled"><a href="#">&raquo;</a></li>
+              {% endif %}
+              </ul>
+            </nav>
+</body>
+</html>

@@ -1,0 +1,57 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <div class="container">
+    <div class="row">
+        <table class="table table-hover">
+            <tr>
+                <th>Musician</th><th>Genre</th>
+            </tr>
+            {% for m in book_list %}
+            <tr>
+                <td {% if m.is_speacia %} style="font-weight: bold;"{% endif %}>
+                    {{ m.name }}
+                    {% if m.is_pretentious %}*{% endif %}
+                </td>
+                <td {% if m.is_pretentious %} {% endif %}>{{ m.genre }}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+        <nav>
+            <ul class="pager">
+                {% if book_list.has_previous %}
+                    <li class="previous"><a
+                            href="?typ={{ query_category }}&page={{ book_list.previous_page_number }}">上一页</a>
+                    </li>
+                {% else %}
+                    <li class="previous disabled"><a href="#">上一页</a></li>
+                {% endif %}
+                第 {{ book_list.number }} / {{ book_list.paginator.num_pages }}页
+                {% if book_list.has_next %}
+                    <li class="next"><a
+                            href="?typ={{ query_category }}&page={{ book_list.next_page_number }}">下一页</a>
+                    </li>
+                {% else %}
+                    <li class="next disabled"><a href="#">下一页</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    </div>
+    {% if has_pretentious %}* Pretentious{% endif %}
+</head>
+<body>
+
+</body>
+</html>

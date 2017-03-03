@@ -1,0 +1,32 @@
+{#<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">  #}
+{#<html lang="en">  #}
+{#<head>  #}
+{#    <link rel="stylesheet" href="default.css" type="text/css">  #}
+{#    <title>My to-do list</title>  #}
+{#</head>  #}
+{#<body>  #}
+{#    <h1 id="top">Latest tasks</h1>  #}
+{#    {% if task_list %}  #}
+{#        <ul>  #}
+{#        {% for task in task_list %}<li>{{ task }}</li>{% endfor %}  #}
+{#        </ul>  #}
+{#    {% else %}  #}
+{#        <p>You have no tasks.</p>  #}
+{#    {% endif %}  #}
+{#    <hr>  #}
+{#    <p><a href="#top">Back to top</a>.</p>  #}
+{#</body>  #}
+{#</html> #}
+
+{% extends 'project/base.html' %}
+{% block title %}My to-do list{% endblock %}
+{% block headline %}Latest tasks{% endblock %}
+{% block content %}
+{% if task_list %}
+    <ul>
+    {% for task in task_list %}<li>{{ task }}</li>{% endfor %}
+    </ul>
+{% else %}
+    <p>You have no tasks.</p>
+{% endif %}
+{% endblock %}

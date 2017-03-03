@@ -17,4 +17,6 @@ urlpatterns = patterns('',
         url(r'^issues/', 'project.views.issues'),
         url(r'^summaryproject/', 'project.views.summaryproject', name='summaryproject'),
         url(r'^ajaxproject/', 'project.views.ajaxproject', name='ajaxproject'),
+        url(r"apply_update.html/search", 'project.views.apply_update_search', name='post_order_id'),
+        url(r"apply_music", 'project.views.apply_music', name='apply_music')
         )

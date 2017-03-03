@@ -1,3 +1,4 @@
+#coding:utf-8
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -11,6 +12,7 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 import ldap
 import json
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from learn.models import CmccProject, CmccProjectStakeholders, CmccProjectChip
 
 @login_required
@@ -147,3 +149,54 @@ def ajaxproject(request):
     print json.loads(the_page)
     return HttpResponse(the_page, content_type="application/json")
 
+def apply_update_search(request):
+    if request.method == 'GET':
+        records = CmccProject.objects.all()  #数据库搜索
+        page = request.GET.get('page')        # 与前端页面的a标签链接保持一致
+        pageinator = Paginator(records, 5)
+        try:
+            contacts = pageinator.page(page)
+        except PageNotAnInteger:      # 如果输入到不是一个数字，发送第一页
+            contacts = pageinator.page(1)
+        except EmptyPage:   # 如果获取到超过来页数范围，那么就返回最后一页。
+            contacts = pageinator.page(pageinator.num_pages)
+        print dir(contacts)
+        print contacts.has_previous()
+        print contacts.has_next()
+        return render(request,'project/apply_update.html',{'btitle':'搜索操作记录','contacts':contacts})
+
+def apply_music(request):
+    MUSICIANS = [
+        {'name': 'Django Reinhardt', 'genre': 'jazz'},
+        {'name': 'Jimi Hendrix',     'genre': 'rock'},
+        {'name': 'Louis Armstrong',  'genre': 'jazz'},
+        {'name': 'Pete Townsend',    'genre': 'rock'},
+        {'name': 'Yanni',            'genre': 'new age'},
+        {'name': 'Ella Fitzgerald',  'genre': 'jazz'},
+        {'name': 'Wesley Willis',    'genre': 'casio'},
+        {'name': 'John Lennon',      'genre': 'rock'},
+        {'name': 'Bono',             'genre': 'rock'},
+        {'name': 'Garth Brooks',     'genre': 'country'},
+        {'name': 'Duke Ellington',   'genre': 'jazz'},
+        {'name': 'William Shatner',  'genre': 'spoken word'},
+        {'name': 'Madonna',          'genre': 'pop'},
+    ]
+    has_pretentious = False
+    musicians = []
+    for mus in MUSICIANS:
+        if ' ' not in mus['name']:
+            has_pretentious = True
+        musicians.append({'name': mus['name'], 'genre': mus['genre'],
+                          'is_speacia': mus['genre'] in ('jazz', 'rock'),
+                          'is_pretentious': ' ' not in mus['name'],
+                          })
+    paginator = Paginator(musicians, 10)
+    page = request.GET.get('page')
+    try:
+        book_list = paginator.page(page)
+    except PageNotAnInteger:
+        book_list = paginator.page(1)
+    except EmptyPage:
+        book_list = paginator.page(paginator.num_pages)
+    print dir(book_list)
+    return render(request, 'project/test2.html', locals())

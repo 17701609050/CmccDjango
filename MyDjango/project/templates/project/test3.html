@@ -1,0 +1,23 @@
+{#<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <title>Completed tasks | To-do list</title>#}
+{#    <link rel="stylesheet" href="default.css" type="text/css">#}
+{#    <script type="text/javascript" src="completed.js">#}
+{#</head>#}
+{#<body>#}
+{#    <h1 id="top">{{ task.title }}</h1>#}
+{#    <p>{{ task.description }}</p>#}
+{#    <hr>#}
+{#    <p><a href="#top">Back to top</a>.</p>#}
+{#</body>#}
+{#</html>#}
+{% extends 'project/base.html' %}
+{% block title %}Completed tasks | To-do list{% endblock %}
+
+
+{#{% block extrahead %}<script type="text/javascript" src="completed.js">{% endblock %}#}
+
+{% block headline %}{{ task.title }}{% endblock %}
+
+{% block content %}<p>{{ task.description }}</p> {% endblock %}
