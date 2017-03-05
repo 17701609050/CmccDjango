@@ -199,4 +199,4 @@ def apply_music(request):
     except EmptyPage:
         book_list = paginator.page(paginator.num_pages)
     print dir(book_list)
-    return render(request, 'project/test2.html', locals())
+    return render(request, 'project/apply_music.html', locals())

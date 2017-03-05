@@ -1,3 +1,4 @@
+#coding:utf-8
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -6,6 +7,9 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import MyUser, Book, Image
+import logging
+logger = logging.getLogger("django") # 为loggers中定义的名称
+
 
 def library(request):
     active_menu = 'homepage'
@@ -21,6 +25,7 @@ def library(request):
 
 @login_required
 def add_book(request):
+    logger.info("add_book...")
     active_menu = 'add_book'
     user = request.user
     state = None
@@ -34,6 +39,7 @@ def add_book(request):
         )
         new_book.save()
         state = 'success'
+    logger.info(locals())
     # content = {
     #     'user': user,
     #     'active_menu': 'add_book',
