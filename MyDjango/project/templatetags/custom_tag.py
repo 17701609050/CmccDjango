@@ -10,6 +10,11 @@ register = template.Library()   # 注册到tempate库里面
 def ljf_lower(val):    #这个仅仅是测试练习写的代码，可以忽略。
     return val.lower()
 
+@register.filter(name='cut')
+def cut(val, arg):
+    print val
+    print arg
+    return val.replace(arg, ',')
 
 @register.simple_tag()     # simple_tag能够对传入多个参数有效
 def guess_page(current_page,loop_num):
